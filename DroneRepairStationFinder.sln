@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneRepairStationFinder", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneRepairStationFinderTests", "DroneRepairStationFinderTests\DroneRepairStationFinderTests.csproj", "{FBD091E3-8FCB-428E-9D89-8555F5E145B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTree", "BinaryTree\BinaryTree.csproj", "{3F1A87FA-C519-4E3B-B526-AB11C32A9BF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTreeTests", "BinaryTreeTests\BinaryTreeTests.csproj", "{09073394-7583-4212-9FE7-01F9F912D329}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{FBD091E3-8FCB-428E-9D89-8555F5E145B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBD091E3-8FCB-428E-9D89-8555F5E145B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBD091E3-8FCB-428E-9D89-8555F5E145B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F1A87FA-C519-4E3B-B526-AB11C32A9BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F1A87FA-C519-4E3B-B526-AB11C32A9BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F1A87FA-C519-4E3B-B526-AB11C32A9BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F1A87FA-C519-4E3B-B526-AB11C32A9BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09073394-7583-4212-9FE7-01F9F912D329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09073394-7583-4212-9FE7-01F9F912D329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09073394-7583-4212-9FE7-01F9F912D329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09073394-7583-4212-9FE7-01F9F912D329}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

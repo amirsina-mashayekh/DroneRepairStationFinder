@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DroneRepairStationFinder.BinaryTreeUtil
+namespace BinaryTreeUtil
 {
     /// <summary>
     /// Represents a node in a <see cref="BinaryTree{T}"/>.
@@ -12,6 +8,10 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
     /// <typeparam name="T">Specifies the element type of the binary tree.</typeparam>
     public class BinaryTreeNode<T>
     {
+        internal BinaryTree<T> tree;
+        internal BinaryTreeNode<T> left;
+        internal BinaryTreeNode<T> right;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryTree{T}"/>
         /// class, containing the specified value.
@@ -21,7 +21,7 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
         {
             Value = value;
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryTree{T}"/>
         /// class belonging to a binary tree, containing the specified value.
@@ -30,7 +30,7 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
         /// <param name="value">The value to contain in the <see cref="BinaryTreeNode{T}"/>.</param>
         internal BinaryTreeNode(BinaryTree<T> tree, T value)
         {
-            Tree = tree;
+            this.tree = tree;
             Value = value;
         }
 
@@ -38,17 +38,17 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
         /// Gets the <see cref="BinaryTree{T}"/> that the
         /// <see cref="BinaryTreeNode{T}"/> belongs to.
         /// </summary>
-        public BinaryTree<T> Tree { get; internal set; }
+        public BinaryTree<T> Tree => tree;
 
         /// <summary>
         /// Gets the left child of node in the <see cref="BinaryTree{T}"/>.
         /// </summary>
-        public BinaryTreeNode<T> Left { get; internal set; }
+        public BinaryTreeNode<T> Left => left;
 
         /// <summary>
         /// Gets the right child of node in the <see cref="BinaryTree{T}"/>.
         /// </summary>
-        public BinaryTreeNode<T> Right { get; internal set; }
+        public BinaryTreeNode<T> Right => right;
 
         /// <summary>
         /// Gets the value contained in the node.
@@ -60,7 +60,10 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
         /// </summary>
         public bool IsLeaf => Left is null && Right is null;
 
-        public override string ToString() => $"{Value}";
+        public override string ToString()
+        {
+            return $"{Value}";
+        }
     }
 
     /// <summary>
@@ -243,6 +246,21 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
         }
 
         /// <summary>
+        /// Gets height of the specified node.
+        /// </summary>
+        /// <param name="node">The <see cref="BinaryTreeNode{T}"/> to calculate height of it.</param>
+        /// <returns>Height of <paramref name="node"/>.</returns>
+        public int GetHeight(BinaryTreeNode<T> node)
+        {
+            if (node is null)
+            {
+                return -1;
+            }
+
+            return Math.Max(GetHeight(node.Left), GetHeight(node.Right)) + 1;
+        }
+
+        /// <summary>
         /// Sets the left child of specified node in the <see cref="BinaryTree{T}"/> to a new node.
         /// If the node has an existing left child, it will be detached.
         /// </summary>
@@ -272,9 +290,9 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
             }
 
             detachedNode = node.Left;
-            PostOrderTraverse(n => n.Tree = null, detachedNode);
-            node.Left = newNode;
-            PostOrderTraverse(n => n.Tree = this, newNode);
+            PostOrderTraverse(n => n.tree = null, detachedNode);
+            node.left = newNode;
+            PostOrderTraverse(n => n.tree = this, newNode);
         }
 
         /// <summary>
@@ -331,9 +349,9 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
             }
 
             detachedNode = node.Right;
-            PostOrderTraverse(n => n.Tree = null, detachedNode);
-            node.Right = newNode;
-            PostOrderTraverse(n => n.Tree = this, newNode);
+            PostOrderTraverse(n => n.tree = null, detachedNode);
+            node.right = newNode;
+            PostOrderTraverse(n => n.tree = this, newNode);
         }
 
         /// <summary>
@@ -365,10 +383,10 @@ namespace DroneRepairStationFinder.BinaryTreeUtil
         /// </summary>
         public void Clear()
         {
-            PostOrderTraverse(n => n.Tree = null, Root.Left);
-            PostOrderTraverse(n => n.Tree = null, Root.Right);
-            Root.Left = null;
-            Root.Right = null;
+            PostOrderTraverse(n => n.tree = null, Root.Left);
+            PostOrderTraverse(n => n.tree = null, Root.Right);
+            Root.left = null;
+            Root.right = null;
             Root.Value = default;
         }
     }
