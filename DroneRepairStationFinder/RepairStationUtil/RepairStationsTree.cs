@@ -57,36 +57,36 @@ namespace DroneRepairStationFinder.RepairStationUtil
         }
 
         /// <summary>
-        /// Generates a binary tree of repair station locations based on distance from the origin.
+        /// Generates a binary tree of repair station locations based on distance from the specified origin.
         /// </summary>
-        /// <param name="Stations">The list of repair station locations.</param>
+        /// <param name="stations">The list of repair station locations.</param>
+        /// <param name="origin">The <see cref="GeoCoordinate"/> which contains location of the origin.</param>
         /// <returns>A <see cref="BinaryTree{T}"/> of repair station locations.</returns>
-        public static BinaryTree<GeoCoordinate> GetStationsTree(List<GeoCoordinate> Stations)
+        public static BinaryTree<GeoCoordinate> GetStationsTree(List<GeoCoordinate> stations, GeoCoordinate origin)
         {
-            if (Stations.Count < 1)
+            if (stations.Count < 1)
             {
                 return null;
             }
 
             BinaryTree<GeoCoordinate> tree = new BinaryTree<GeoCoordinate>();
             Queue<BinaryTreeNode<GeoCoordinate>> queue = new Queue<BinaryTreeNode<GeoCoordinate>>();
-            GeoCoordinate tehran = new GeoCoordinate(35.715298, 51.404343, 1000);
 
-            Stations = SortByDistance(tehran, Stations);
-            tree.Root.Value = Stations[0];
-            Stations.RemoveAt(0);
+            stations = SortByDistance(origin, stations);
+            tree.Root.Value = stations[0];
+            stations.RemoveAt(0);
             queue.Enqueue(tree.Root);
 
-            while (Stations.Count > 0)
+            while (stations.Count > 0)
             {
                 BinaryTreeNode<GeoCoordinate> node = queue.Dequeue();
-                Stations = SortByDistance(node.Value, Stations);
-                queue.Enqueue(tree.SetLeft(node, Stations[0], out _));
-                Stations.RemoveAt(0);
-                if (Stations.Count > 0)
+                stations = SortByDistance(node.Value, stations);
+                queue.Enqueue(tree.SetLeft(node, stations[0], out _));
+                stations.RemoveAt(0);
+                if (stations.Count > 0)
                 {
-                    queue.Enqueue(tree.SetRight(node, Stations[0], out _));
-                    Stations.RemoveAt(0);
+                    queue.Enqueue(tree.SetRight(node, stations[0], out _));
+                    stations.RemoveAt(0);
                 }
             }
 
