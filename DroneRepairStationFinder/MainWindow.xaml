@@ -5,7 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DroneRepairStationFinder"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Drone Repair Station Finder" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px" />
+            <RowDefinition Height="30px" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
+            <Button x:Name="AddStationButton" Click="AddStationButton_Click">Add Station</Button>
+            <Button x:Name="RemoveStationButton">Remove Station</Button>
+            <Button x:Name="RemoveButton">Remove Station</Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <Button x:Name="LoadButton">Load</Button>
+            <Button x:Name="SaveButton">Save</Button>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="TreeGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
+        </ScrollViewer>
     </Grid>
 </Window>

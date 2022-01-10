@@ -81,24 +81,27 @@ namespace BinaryTreeUtil
         public void PrintToConsole(BinaryTreeNode<T> root, string indent = "", bool right = true)
         {
             Console.Write(indent);
-            if (right)
+            if (root != Root)
             {
-                Console.Write("└─");
-                indent += "  ";
-            }
-            else
-            {
-                Console.Write("├─");
-                indent += "| ";
-            }
+                if (right)
+                {
+                    Console.Write("└─");
+                    indent += "  ";
+                }
+                else
+                {
+                    Console.Write("├─");
+                    indent += "| ";
+                }
 
-            if (root is null)
-            {
-                Console.WriteLine();
-                return;
-            }
+                if (root is null)
+                {
+                    Console.WriteLine();
+                    return;
+                }
 
-            Console.Write(' ');
+                Console.Write(' ');
+            }
             Console.WriteLine(root.Value);
 
             if (!root.IsLeaf)
