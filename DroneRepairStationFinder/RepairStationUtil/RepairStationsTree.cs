@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DroneRepairStationFinder.RepairStationUtil
 {
-    public static class RepairStationsTree
+    public static partial class RepairStationsTree
     {
         /// <summary>
         /// Calculates distance between two <see cref="GeoCoordinate"/>s
