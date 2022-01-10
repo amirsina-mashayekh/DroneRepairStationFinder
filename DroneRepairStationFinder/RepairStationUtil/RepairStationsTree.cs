@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
+using System.Linq;
 
 namespace DroneRepairStationFinder.RepairStationUtil
 {
@@ -30,7 +31,7 @@ namespace DroneRepairStationFinder.RepairStationUtil
         /// <returns>A new list which contains <paramref name="locations"/> members sorted.</returns>
         private static List<GeoCoordinate> SortByDistance(GeoCoordinate origin, List<GeoCoordinate> locations)
         {
-            List<GeoCoordinate> result = new List<GeoCoordinate>();
+            var result = new List<GeoCoordinate>();
 
             int cnt = locations.Count;
 
@@ -69,9 +70,10 @@ namespace DroneRepairStationFinder.RepairStationUtil
                 return null;
             }
 
-            BinaryTree<GeoCoordinate> tree = new BinaryTree<GeoCoordinate>();
-            Queue<BinaryTreeNode<GeoCoordinate>> queue = new Queue<BinaryTreeNode<GeoCoordinate>>();
+            var tree = new BinaryTree<GeoCoordinate>();
+            var queue = new Queue<BinaryTreeNode<GeoCoordinate>>();
 
+            stations = new List<GeoCoordinate>(stations);
             stations = SortByDistance(origin, stations);
             tree.Root.Value = stations[0];
             stations.RemoveAt(0);
@@ -91,6 +93,77 @@ namespace DroneRepairStationFinder.RepairStationUtil
             }
 
             return tree;
+        }
+
+        /// <summary>
+        /// Finds the nearest repair station to drone.
+        /// </summary>
+        /// <param name="stationsTree">The <see cref="BinaryTree{T}"/> containing location of repair stations.</param>
+        /// <param name="droneLocation">The <see cref="GeoCoordinate"/> which represents the location of the drone.</param>
+        /// <param name="checkedStations">When the method returns, this list contains the nodes which are checked.</param>
+        /// <returns>The <see cref="BinaryTreeNode{T}"/> which represents the location of nearest station to the drone.</returns>
+        public static BinaryTreeNode<GeoCoordinate> GetNearestStation(
+            BinaryTree<GeoCoordinate> stationsTree,
+            GeoCoordinate droneLocation,
+            out List<BinaryTreeNode<GeoCoordinate>> checkedStations)
+        {
+            checkedStations = new List<BinaryTreeNode<GeoCoordinate>>
+            {
+                stationsTree.Root
+            };
+
+            if (stationsTree.Root.IsLeaf)
+            {
+                return stationsTree.Root;
+            }
+
+            var n1 = stationsTree.Root.Left;
+            var n2 = stationsTree.Root.Right;
+
+            var check = new List<BinaryTreeNode<GeoCoordinate>>
+            {
+                stationsTree.Root, n1, n2
+            };
+
+            while (true)
+            {
+                if (n1 != null)
+                {
+                    check.Add(n1.Left);
+                    check.Add(n1.Right);
+                }
+                if (n2 != null)
+                {
+                    check.Add(n2.Left);
+                    check.Add(n2.Right);
+                }
+
+                check.RemoveAll(n => n is null || n.Value is null);
+                foreach (BinaryTreeNode<GeoCoordinate> l in check)
+                {
+                    if (!checkedStations.Contains(l))
+                    {
+                        checkedStations.Add(l);
+                    }
+                }
+
+                List<GeoCoordinate> sorted =
+                    SortByDistance(droneLocation, check.Select(n => n.Value).ToList());
+                int cnt = sorted.Count;
+                if (n1.Value == sorted[0] && cnt > 1 && n2.Value == sorted[1])
+                {
+                    return check.Find(n => n.Value == sorted[0]);
+                }
+
+                n1 = check.Find(n => n.Value == sorted[0]);
+                if (cnt > 1)
+                {
+                    n2 = check.Find(n => n.Value == sorted[1]);
+                }
+                check.Clear();
+                check.Add(n1);
+                check.Add(n2);
+            }
         }
     }
 }
