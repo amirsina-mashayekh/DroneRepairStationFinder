@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BinaryTree")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Binary Tree")]
+[assembly: AssemblyDescription("Binary tree library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BinaryTree")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyProduct("Binary Tree")]
+[assembly: AssemblyCopyright("Copyright © 2022 AmirSina Mashayekh")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
