@@ -1,11 +1,9 @@
-﻿using DroneRepairStationFinder.RepairStationUtil;
-using BinaryTreeUtil;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Device.Location;
-using static DroneRepairStationFinder.RepairStationUtil.RepairStationsTree;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using static DroneRepairStationFinder.RepairStationUtil.RepairStationsTree;
 
 namespace DroneRepairStationFinder.RepairStationUtil.Tests
 {
@@ -28,15 +26,15 @@ namespace DroneRepairStationFinder.RepairStationUtil.Tests
             };
 
             WriteStationsToFile(@"D:\a.xml", list);
-            var a = ReadStationsFromFile(@"D:\a.xml");
-            var tree = GetStationsTree(list, new GeoCoordinate(0, 0, 0));
+            List<GeoCoordinate> a = ReadStationsFromFile(@"D:\a.xml");
+            BinaryTreeUtil.BinaryTree<GeoCoordinate> tree = GetStationsTree(list, new GeoCoordinate(0, 0, 0));
             tree.PrintToConsole(tree.Root);
         }
 
         [TestMethod()]
         public void GetNearestStationTest()
         {
-            var list = new List<GeoCoordinate>
+            List<GeoCoordinate> list = new List<GeoCoordinate>
             {
                 new GeoCoordinate(-2, 0, 1),
                 new GeoCoordinate(-9, 5, 6),
@@ -48,9 +46,9 @@ namespace DroneRepairStationFinder.RepairStationUtil.Tests
                 new GeoCoordinate(4, 2, 1),
             };
 
-            var tree = GetStationsTree(list, new GeoCoordinate(0, 0, 0));
+            BinaryTreeUtil.BinaryTree<GeoCoordinate> tree = GetStationsTree(list, new GeoCoordinate(0, 0, 0));
             tree.PrintToConsole(tree.Root);
-            var nearest = GetNearestStation(tree, new GeoCoordinate(3.9, 3, 1.7), out var checkedStations);
+            BinaryTreeUtil.BinaryTreeNode<GeoCoordinate> nearest = GetNearestStation(tree, new GeoCoordinate(3.9, 3, 1.7), out List<BinaryTreeUtil.BinaryTreeNode<GeoCoordinate>> checkedStations);
 
             Assert.AreEqual(list[7], nearest.Value);
             Assert.AreEqual(checkedStations[0].Value, list[5]);
@@ -79,7 +77,7 @@ namespace DroneRepairStationFinder.RepairStationUtil.Tests
 
             string path = "test.xml";
             WriteStationsToFile(path, list);
-            var read = ReadStationsFromFile(path);
+            List<GeoCoordinate> read = ReadStationsFromFile(path);
             File.Delete(path);
             Assert.IsTrue(list.SequenceEqual(read));
         }

@@ -113,7 +113,7 @@ namespace DroneRepairStationFinder
                 nodeToolTip = $"{val.Latitude}\n{val.Longitude}\n{val.Altitude}";
             }
 
-            var node = new Border
+            Border node = new Border
             {
                 Tag = root,
                 Background = NormalNodesBrush,
@@ -143,7 +143,7 @@ namespace DroneRepairStationFinder
             {
                 Point st = new Point(node.Margin.Left + node.ActualWidth / 2, node.Margin.Top + node.ActualHeight / 2);
 
-                var lNode = DrawStationsTree(tree, root.Left, ref top, left + treeHorizontalDist);
+                Border lNode = DrawStationsTree(tree, root.Left, ref top, left + treeHorizontalDist);
                 lNode.UpdateLayout();
                 Point le = new Point(lNode.Margin.Left + 5, lNode.Margin.Top + lNode.ActualHeight / 2);
                 TreeGrid.Children.Add(new Line()
@@ -158,7 +158,7 @@ namespace DroneRepairStationFinder
                 });
 
                 top += treeVerticalDist;
-                var rNode = DrawStationsTree(tree, root.Right, ref top, left + treeHorizontalDist);
+                Border rNode = DrawStationsTree(tree, root.Right, ref top, left + treeHorizontalDist);
                 rNode.UpdateLayout();
                 Point rm = new Point(st.X, rNode.Margin.Top + rNode.ActualHeight / 2);
                 Point re = new Point(rNode.Margin.Left + 5, rm.Y);
@@ -189,7 +189,7 @@ namespace DroneRepairStationFinder
 
         private void AddStationButton_Click(object sender, RoutedEventArgs e)
         {
-            var gcd = new GetCoordinateDialog("Please enter the coordinates of new repair station:",
+            GetCoordinateDialog gcd = new GetCoordinateDialog("Please enter the coordinates of new repair station:",
                 "New Repair Station", XYZ, this);
 
             if (gcd.ShowDialog() == true)
@@ -212,7 +212,7 @@ namespace DroneRepairStationFinder
 
         private void SetOriginButton_Click(object sender, RoutedEventArgs e)
         {
-            var gcd = new GetCoordinateDialog("Please enter the coordinates of the origin point:", "Set Origin", XYZ, this);
+            GetCoordinateDialog gcd = new GetCoordinateDialog("Please enter the coordinates of the origin point:", "Set Origin", XYZ, this);
 
             if (gcd.ShowDialog() == true)
             {
@@ -223,24 +223,24 @@ namespace DroneRepairStationFinder
 
         private void SetLocationButton_Click(object sender, RoutedEventArgs e)
         {
-            var gcd = new GetCoordinateDialog("Please enter the coordinates of the origin point:", "Set Origin", XYZ, this);
+            GetCoordinateDialog gcd = new GetCoordinateDialog("Please enter the coordinates of the origin point:", "Set Origin", XYZ, this);
 
             if (gcd.ShowDialog() != true)
             {
                 DroneLocationText.Text = "Not Set";
                 return;
             }
-            var droneLocation = new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z);
+            GeoCoordinate droneLocation = new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z);
             UpdateTree();
 
             BinaryTreeNode<GeoCoordinate> nearest =
-                GetNearestStation(stationsTree, droneLocation, out var check);
+                GetNearestStation(stationsTree, droneLocation, out List<BinaryTreeNode<GeoCoordinate>> check);
 
             foreach (UIElement element in TreeGrid.Children)
             {
                 if (element is Border nodeBorder)
                 {
-                    var node = nodeBorder.Tag as BinaryTreeNode<GeoCoordinate>;
+                    BinaryTreeNode<GeoCoordinate> node = nodeBorder.Tag as BinaryTreeNode<GeoCoordinate>;
                     if (check.Contains(node))
                     {
                         nodeBorder.Background =
@@ -312,7 +312,7 @@ namespace DroneRepairStationFinder
 
         private void Node_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var node = (sender as Border).Tag as BinaryTreeNode<GeoCoordinate>;
+            BinaryTreeNode<GeoCoordinate> node = (sender as Border).Tag as BinaryTreeNode<GeoCoordinate>;
 
             MessageBoxResult res = MessageBox.Show(
                 "Are you sure you want to delete repair station at:\n" +

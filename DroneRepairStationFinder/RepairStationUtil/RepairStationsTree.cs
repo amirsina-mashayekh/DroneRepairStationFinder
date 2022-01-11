@@ -47,7 +47,7 @@ namespace DroneRepairStationFinder.RepairStationUtil
         /// <returns>A new list which contains <paramref name="locations"/> members sorted.</returns>
         private static List<GeoCoordinate> SortByDistance(GeoCoordinate origin, List<GeoCoordinate> locations)
         {
-            var result = new List<GeoCoordinate>();
+            List<GeoCoordinate> result = new List<GeoCoordinate>();
 
             int cnt = locations.Count;
 
@@ -86,8 +86,8 @@ namespace DroneRepairStationFinder.RepairStationUtil
                 return null;
             }
 
-            var tree = new BinaryTree<GeoCoordinate>();
-            var queue = new Queue<BinaryTreeNode<GeoCoordinate>>();
+            BinaryTree<GeoCoordinate> tree = new BinaryTree<GeoCoordinate>();
+            Queue<BinaryTreeNode<GeoCoordinate>> queue = new Queue<BinaryTreeNode<GeoCoordinate>>();
 
             stations = new List<GeoCoordinate>(stations);
             stations = SortByDistance(origin, stations);
@@ -133,10 +133,10 @@ namespace DroneRepairStationFinder.RepairStationUtil
                 return stationsTree.Root;
             }
 
-            var n1 = stationsTree.Root.Left;
-            var n2 = stationsTree.Root.Right;
+            BinaryTreeNode<GeoCoordinate> n1 = stationsTree.Root.Left;
+            BinaryTreeNode<GeoCoordinate> n2 = stationsTree.Root.Right;
 
-            var check = new List<BinaryTreeNode<GeoCoordinate>>
+            List<BinaryTreeNode<GeoCoordinate>> check = new List<BinaryTreeNode<GeoCoordinate>>
             {
                 stationsTree.Root, n1, n2
             };
