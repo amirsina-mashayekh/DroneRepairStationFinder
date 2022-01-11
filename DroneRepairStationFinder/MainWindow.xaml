@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Drone Repair Station Finder" Height="450" Width="800">
+        Title="Drone Repair Station Finder" Height="450" Width="800" MinHeight="425" MinWidth="750">
 
     <Window.Resources>
         <Style TargetType="{x:Type Button}">

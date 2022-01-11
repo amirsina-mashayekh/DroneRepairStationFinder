@@ -39,21 +39,26 @@ namespace DroneRepairStationFinder
         public MainWindow()
         {
             InitializeComponent();
+
             Origin = new GeoCoordinate(0, 0, 0);
         }
 
-        public void GenerateAndDrawTree()
+        public void UpdateTree()
         {
-            if (TreeGrid is null)
+            BinaryTree<GeoCoordinate> tree;
+            if (TreeGrid is null || (tree = GetStationsTree(stations, Origin)) is null)
             {
+                RemoveStationButton.IsEnabled = false;
+                SaveButton.IsEnabled = false;
+                SetLocationButton.IsEnabled = false;
                 return;
             }
+
+            RemoveStationButton.IsEnabled = true;
+            SaveButton.IsEnabled = true;
+            SetLocationButton.IsEnabled = true;
+
             TreeGrid.Children.Clear();
-            var tree = GetStationsTree(stations, Origin);
-            if (tree is null)
-            {
-                return;
-            }
             double top = 0;
             DrawStationsTree(tree, tree.Root, ref top);
         }
@@ -155,7 +160,7 @@ namespace DroneRepairStationFinder
             if (gcd.ShowDialog() == true)
             {
                 stations.Add(new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z));
-                GenerateAndDrawTree();
+                UpdateTree();
             }
         }
 
@@ -184,7 +189,7 @@ namespace DroneRepairStationFinder
             if (gcd.ShowDialog() == true)
             {
                 Origin = new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z);
-                GenerateAndDrawTree();
+                UpdateTree();
             }
         }
 
@@ -209,7 +214,7 @@ namespace DroneRepairStationFinder
                         MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                GenerateAndDrawTree();
+                UpdateTree();
             }
         }
 
@@ -239,7 +244,7 @@ namespace DroneRepairStationFinder
         private void LocationSystem_Checked(object sender, RoutedEventArgs e)
         {
             XYZ = (sender as RadioButton) == XYZSystem;
-            GenerateAndDrawTree();
+            UpdateTree();
         }
 
         private void Node_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -257,7 +262,7 @@ namespace DroneRepairStationFinder
             if (res == MessageBoxResult.Yes)
             {
                 stations.Remove(node.Value);
-                GenerateAndDrawTree();
+                UpdateTree();
             }
             else
             {
