@@ -41,36 +41,32 @@ namespace DroneRepairStationFinder
             }
         }
 
-        private bool RemoveMode
+        private void SetRemoveMode(bool value)
         {
-            get => _removeMode;
-            set
+            if (_removeMode == value)
             {
-                if (_removeMode == value)
+                return;
+            }
+            _removeMode = value;
+            if (value)
+            {
+                foreach (UIElement element in TreeGrid.Children)
                 {
-                    return;
-                }
-                _removeMode = value;
-                if (value)
-                {
-                    foreach (UIElement element in TreeGrid.Children)
+                    if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
                     {
-                        if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
-                        {
-                            node.Cursor = Cursors.Hand;
-                            node.MouseLeftButtonDown += Node_MouseLeftButtonDown;
-                        }
+                        node.Cursor = Cursors.Hand;
+                        node.MouseLeftButtonDown += Node_MouseLeftButtonDown;
                     }
                 }
-                else
+            }
+            else
+            {
+                foreach (UIElement element in TreeGrid.Children)
                 {
-                    foreach (UIElement element in TreeGrid.Children)
+                    if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
                     {
-                        if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
-                        {
-                            node.Cursor = Cursors.Arrow;
-                            node.MouseLeftButtonDown -= Node_MouseLeftButtonDown;
-                        }
+                        node.Cursor = Cursors.Arrow;
+                        node.MouseLeftButtonDown -= Node_MouseLeftButtonDown;
                     }
                 }
             }
@@ -205,7 +201,7 @@ namespace DroneRepairStationFinder
 
         private void RemoveStationButton_Click(object sender, RoutedEventArgs e)
         {
-            RemoveMode = true;
+            SetRemoveMode(true);
 
             MessageBox.Show(
                 "Please click on the station which you want to remove.",
@@ -333,7 +329,7 @@ namespace DroneRepairStationFinder
             }
             else
             {
-                RemoveMode = false;
+                SetRemoveMode(false);
             }
         }
     }

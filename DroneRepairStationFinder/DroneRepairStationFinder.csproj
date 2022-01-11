@@ -7,7 +7,7 @@
     <ProjectGuid>{CA191795-F22E-4E24-BD8B-3C53FE86D22F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DroneRepairStationFinder</RootNamespace>
-    <AssemblyName>DroneRepairStationFinder</AssemblyName>
+    <AssemblyName>Drone Repair Station Finder</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,6 +33,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>DroneRepairStationFinder.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Location.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -109,6 +115,9 @@
       <Project>{3f1a87fa-c519-4e3b-b526-ab11c32a9bf9}</Project>
       <Name>BinaryTree</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Location.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
