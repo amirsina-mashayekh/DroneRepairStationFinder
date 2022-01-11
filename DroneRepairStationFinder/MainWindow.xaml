@@ -49,14 +49,15 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
             <Button x:Name="AddStationButton" Click="AddStationButton_Click">Add Repair Station</Button>
             <Button x:Name="RemoveStationButton" Click="RemoveStationButton_Click">Remove Repair Station</Button>
-            <Button x:Name="SetLocationButton">Set Drone Location</Button>
+            <Button x:Name="SetLocationButton" Click="SetLocationButton_Click">Set Drone Location</Button>
             <Button x:Name="SetOriginButton" Click="SetOriginButton_Click">Set Origin Location</Button>
         </StackPanel>
 
@@ -82,8 +83,13 @@
             <Run x:Name="OriginText" />
         </TextBlock>
 
-        <ScrollViewer Grid.Row="4" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Grid x:Name="TreeGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
+        <TextBlock Grid.Row="4" HorizontalAlignment="Center" FontSize="16">
+            Drone Location:
+            <Run x:Name="DroneLocationText">Not Set</Run>
+        </TextBlock>
+
+        <ScrollViewer Grid.Row="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="TreeGrid" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" />
         </ScrollViewer>
     </Grid>
 </Window>

@@ -22,6 +22,10 @@ namespace DroneRepairStationFinder
         private const double treeLinesWidth = 2;
         private static GeoCoordinate _origin;
         private static List<GeoCoordinate> stations = new List<GeoCoordinate>();
+        private static BinaryTree<GeoCoordinate> stationsTree;
+        private static readonly Brush NormalNodesBrush = Brushes.SkyBlue;
+        private static readonly Brush HighlightedNodesBrush = Brushes.LimeGreen;
+        private static readonly Brush MarkedNodesBrush = Brushes.Gold;
 
         private GeoCoordinate Origin
         {
@@ -45,8 +49,7 @@ namespace DroneRepairStationFinder
 
         public void UpdateTree()
         {
-            BinaryTree<GeoCoordinate> tree;
-            if (TreeGrid is null || (tree = GetStationsTree(stations, Origin)) is null)
+            if (TreeGrid is null || (stationsTree = GetStationsTree(stations, Origin)) is null)
             {
                 RemoveStationButton.IsEnabled = false;
                 SaveButton.IsEnabled = false;
@@ -60,7 +63,7 @@ namespace DroneRepairStationFinder
 
             TreeGrid.Children.Clear();
             double top = 0;
-            DrawStationsTree(tree, tree.Root, ref top);
+            DrawStationsTree(stationsTree, stationsTree.Root, ref top);
         }
 
         private Border DrawStationsTree(
@@ -81,7 +84,7 @@ namespace DroneRepairStationFinder
             var node = new Border
             {
                 Tag = root,
-                Background = Brushes.SkyBlue,
+                Background = NormalNodesBrush,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(left, top, 0, 0),
@@ -191,6 +194,41 @@ namespace DroneRepairStationFinder
                 Origin = new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z);
                 UpdateTree();
             }
+        }
+
+        private void SetLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            var gcd = new GetCoordinateDialog("Please enter the coordinates of the origin point:", "Set Origin", XYZ, this);
+
+            if (gcd.ShowDialog() != true)
+            {
+                DroneLocationText.Text = "Not Set";
+                return;
+            }
+            var droneLocation = new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z);
+            UpdateTree();
+
+            BinaryTreeNode<GeoCoordinate> nearest =
+                GetNearestStation(stationsTree, droneLocation, out var check);
+
+            foreach (UIElement element in TreeGrid.Children)
+            {
+                if (element is Border nodeBorder)
+                {
+                    var node = nodeBorder.Tag as BinaryTreeNode<GeoCoordinate>;
+                    if (check.Contains(node))
+                    {
+                        nodeBorder.Background =
+                            node == nearest ? MarkedNodesBrush : HighlightedNodesBrush;
+                    }
+                    else
+                    {
+                        nodeBorder.Background = NormalNodesBrush;
+                    }
+                }
+            }
+
+            DroneLocationText.Text = $"{gcd.LAT_X} {gcd.LONG_Y} {gcd.ALT_Z}";
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
