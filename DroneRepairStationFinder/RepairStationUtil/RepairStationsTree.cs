@@ -9,17 +9,33 @@ namespace DroneRepairStationFinder.RepairStationUtil
     public static partial class RepairStationsTree
     {
         /// <summary>
+        /// Gets or sets whether calculations should be based on X,Y,Z system (<c>true</c>)
+        /// or LAT,LONG,ALT system (<c>false</c>).
+        /// </summary>
+        public static bool XYZ { get; set; } = false;
+
+        /// <summary>
         /// Calculates distance between two <see cref="GeoCoordinate"/>s
-        /// based on latitude, longitude and altitude.
+        /// based on latitude, longitude and altitude or X, Y, Z.
         /// </summary>
         /// <param name="p1">The first <see cref="GeoCoordinate"/>.</param>
         /// <param name="p2">The second <see cref="GeoCoordinate"/>.</param>
         /// <returns>The distance between <paramref name="p1"/> and <paramref name="p2"/> in meters.</returns>
         private static double DistanceBetween(GeoCoordinate p1, GeoCoordinate p2)
         {
-            return Math.Sqrt(
-                    Math.Pow(p1.GetDistanceTo(p2), 2)
-                    + Math.Pow(p1.Altitude - p2.Altitude, 2));
+            if (XYZ)
+            {
+                return Math.Sqrt(
+                        Math.Pow(p1.Latitude - p2.Latitude, 2)
+                        + Math.Pow(p1.Longitude - p2.Longitude, 2)
+                        + Math.Pow(p1.Altitude - p2.Altitude, 2));
+            }
+            else
+            {
+                return Math.Sqrt(
+                        Math.Pow(p1.GetDistanceTo(p2), 2)
+                        + Math.Pow(p1.Altitude - p2.Altitude, 2));
+            }
         }
 
         /// <summary>

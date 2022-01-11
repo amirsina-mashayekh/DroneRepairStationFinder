@@ -10,21 +10,35 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30px" />
             <RowDefinition Height="30px" />
+            <RowDefinition Height="20px" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
-            <Button x:Name="AddStationButton" Click="AddStationButton_Click">Add Station</Button>
-            <Button x:Name="RemoveStationButton">Remove Station</Button>
-            <Button x:Name="RemoveButton">Remove Station</Button>
+            <Button x:Name="AddStationButton" Click="AddStationButton_Click">Add Repair Station</Button>
+            <Button x:Name="RemoveStationButton" Click="RemoveStationButton_Click">Remove Repair Station</Button>
+            <Button x:Name="SetLocationButton">Set Drone Location</Button>
+            <Button x:Name="SetOriginButton">Set Origin Location</Button>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-            <Button x:Name="LoadButton">Load</Button>
-            <Button x:Name="SaveButton">Save</Button>
+            <Button x:Name="LoadButton" Click="LoadButton_Click">Load</Button>
+            <Button x:Name="SaveButton" Click="SaveButton_Click">Save</Button>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
+            <TextBlock>Location System: </TextBlock>
+            <RadioButton x:Name="LLASystem" GroupName="locationSystem" IsChecked="True" VerticalAlignment="Center" Margin="10,0"
+                         Checked="LocationSystem_Checked">
+                LAT,LONG,ALT
+            </RadioButton>
+            <RadioButton x:Name="XYZSystem" GroupName="locationSystem" IsChecked="False" VerticalAlignment="Center"
+                         Checked="LocationSystem_Checked">
+                X,Y,Z
+            </RadioButton>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid x:Name="TreeGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
         </ScrollViewer>
     </Grid>
