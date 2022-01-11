@@ -56,8 +56,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GetCoordinateDialog.xaml.cs">
+      <DependentUpon>GetCoordinateDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RepairStationUtil\RepairStationsSaveLoad.cs" />
     <Compile Include="RepairStationUtil\RepairStationsTree.cs" />
+    <Page Include="GetCoordinateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

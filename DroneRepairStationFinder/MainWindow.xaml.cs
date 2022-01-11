@@ -20,13 +20,26 @@ namespace DroneRepairStationFinder
         private const double treeHorizontalDist = 150;
         private const double treeVerticalDist = 40;
         private const double treeLinesWidth = 2;
+        private static GeoCoordinate _origin;
+        private static List<GeoCoordinate> stations = new List<GeoCoordinate>();
 
-        private static List<GeoCoordinate> stations;
-        private static GeoCoordinate origin = new GeoCoordinate(0, 0, 0);
+        private GeoCoordinate Origin
+        {
+            get => _origin;
+            set
+            {
+                _origin = value;
+                if (value != null)
+                {
+                    OriginText.Text = $"{value.Latitude} {value.Longitude} {value.Altitude}";
+                }
+            }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
+            Origin = new GeoCoordinate(0, 0, 0);
         }
 
         public void GenerateAndDrawTree()
@@ -36,7 +49,11 @@ namespace DroneRepairStationFinder
                 return;
             }
             TreeGrid.Children.Clear();
-            var tree = GetStationsTree(stations, origin);
+            var tree = GetStationsTree(stations, Origin);
+            if (tree is null)
+            {
+                return;
+            }
             double top = 0;
             DrawStationsTree(tree, tree.Root, ref top);
         }
@@ -132,7 +149,14 @@ namespace DroneRepairStationFinder
 
         private void AddStationButton_Click(object sender, RoutedEventArgs e)
         {
+            var gcd = new GetCoordinateDialog("Please enter the coordinates of new repair station:",
+                "New Repair Station", XYZ, this);
 
+            if (gcd.ShowDialog() == true)
+            {
+                stations.Add(new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z));
+                GenerateAndDrawTree();
+            }
         }
 
         private void RemoveStationButton_Click(object sender, RoutedEventArgs e)
@@ -151,6 +175,71 @@ namespace DroneRepairStationFinder
                 "Remove Repair Station",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+        }
+
+        private void SetOriginButton_Click(object sender, RoutedEventArgs e)
+        {
+            var gcd = new GetCoordinateDialog("Please enter the coordinates of the origin point:", "Set Origin", XYZ, this);
+
+            if (gcd.ShowDialog() == true)
+            {
+                Origin = new GeoCoordinate(gcd.LAT_X, gcd.LONG_Y, gcd.ALT_Z);
+                GenerateAndDrawTree();
+            }
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Filter = "XML file|*.xml",
+                Multiselect = false,
+                Title = "Load Repair Stations Data"
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                try
+                {
+                    stations = ReadStationsFromFile(ofd.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while reading file:\n" + ex.Message, "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                GenerateAndDrawTree();
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "XML file|*.xml",
+                Title = "Save Repair Stations Data",
+                FileName = "Stations"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                try
+                {
+                    WriteStationsToFile(sfd.FileName, stations);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while saving file:\n" + ex.Message, "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void LocationSystem_Checked(object sender, RoutedEventArgs e)
+        {
+            XYZ = (sender as RadioButton) == XYZSystem;
+            GenerateAndDrawTree();
         }
 
         private void Node_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -181,60 +270,6 @@ namespace DroneRepairStationFinder
                     }
                 }
             }
-        }
-
-        private void LoadButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog()
-            {
-                Filter = "XML file|*.xml",
-                Multiselect = false,
-                Title = "Load Repair Stations Data"
-            };
-
-            if ((bool)ofd.ShowDialog())
-            {
-                try
-                {
-                    stations = ReadStationsFromFile(ofd.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error while reading file:\n" + ex.Message, "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                GenerateAndDrawTree();
-            }
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog sfd = new SaveFileDialog()
-            {
-                Filter = "XML file|*.xml",
-                Title = "Save Repair Stations Data",
-                FileName = "Stations"
-            };
-
-            if ((bool)sfd.ShowDialog())
-            {
-                try
-                {
-                    WriteStationsToFile(sfd.FileName, stations);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error while saving file:\n" + ex.Message, "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        private void LocationSystem_Checked(object sender, RoutedEventArgs e)
-        {
-            XYZ = (sender as RadioButton) == XYZSystem;
-            GenerateAndDrawTree();
         }
     }
 }
