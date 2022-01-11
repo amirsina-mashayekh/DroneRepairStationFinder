@@ -78,12 +78,12 @@
             </RadioButton>
         </StackPanel>
 
-        <TextBlock Grid.Row="3" HorizontalAlignment="Center" FontSize="16" Margin="0,10">
+        <TextBlock Grid.Row="3" HorizontalAlignment="Center" FontSize="16" Margin="0,10,0,0">
             Origin:
             <Run x:Name="OriginText" />
         </TextBlock>
 
-        <TextBlock Grid.Row="4" HorizontalAlignment="Center" FontSize="16">
+        <TextBlock Grid.Row="4" HorizontalAlignment="Center" FontSize="16" Margin="0,10">
             Drone Location:
             <Run x:Name="DroneLocationText">Not Set</Run>
         </TextBlock>

@@ -13,11 +13,23 @@ namespace DroneRepairStationFinder.RepairStationUtil
     {
         public static void WriteStationsToFile(string path, List<GeoCoordinate> coordinates)
         {
-            using (TextWriter writer = new StreamWriter(path))
-            {
-                var serializer = new XmlSerializer(typeof(List<GeoCoordinate>));
-                serializer.Serialize(writer, coordinates);
-            }
+            var stringBuilder = new StringBuilder();
+            TextWriter writer = new StringWriter(stringBuilder);
+            var serializer = new XmlSerializer(typeof(List<GeoCoordinate>));
+
+            serializer.Serialize(writer, coordinates);
+
+            var lines = new List<string>(
+                stringBuilder.ToString().Split(new string[] { Environment.NewLine },
+                StringSplitOptions.RemoveEmptyEntries));
+
+            lines.RemoveAll(line =>
+                line.Contains("HorizontalAccuracy")
+                || line.Contains("VerticalAccuracy")
+                || line.Contains("Speed")
+                || line.Contains("Course"));
+
+            File.WriteAllLines(path, lines);
         }
 
         public static List<GeoCoordinate> ReadStationsFromFile(string path)

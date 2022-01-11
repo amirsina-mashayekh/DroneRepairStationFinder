@@ -23,6 +23,7 @@ namespace DroneRepairStationFinder
         private static GeoCoordinate _origin;
         private static List<GeoCoordinate> stations = new List<GeoCoordinate>();
         private static BinaryTree<GeoCoordinate> stationsTree;
+        private bool _removeMode;
         private static readonly Brush NormalNodesBrush = Brushes.SkyBlue;
         private static readonly Brush HighlightedNodesBrush = Brushes.LimeGreen;
         private static readonly Brush MarkedNodesBrush = Brushes.Gold;
@@ -36,6 +37,41 @@ namespace DroneRepairStationFinder
                 if (value != null)
                 {
                     OriginText.Text = $"{value.Latitude} {value.Longitude} {value.Altitude}";
+                }
+            }
+        }
+
+        private bool RemoveMode
+        {
+            get => _removeMode;
+            set
+            {
+                if (_removeMode == value)
+                {
+                    return;
+                }
+                _removeMode = value;
+                if (value)
+                {
+                    foreach (UIElement element in TreeGrid.Children)
+                    {
+                        if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
+                        {
+                            node.Cursor = Cursors.Hand;
+                            node.MouseLeftButtonDown += Node_MouseLeftButtonDown;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (UIElement element in TreeGrid.Children)
+                    {
+                        if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
+                        {
+                            node.Cursor = Cursors.Arrow;
+                            node.MouseLeftButtonDown -= Node_MouseLeftButtonDown;
+                        }
+                    }
                 }
             }
         }
@@ -169,14 +205,7 @@ namespace DroneRepairStationFinder
 
         private void RemoveStationButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (UIElement element in TreeGrid.Children)
-            {
-                if (element is Border node && node.Tag is BinaryTreeNode<GeoCoordinate>)
-                {
-                    node.Cursor = Cursors.Hand;
-                    node.MouseLeftButtonDown += Node_MouseLeftButtonDown;
-                }
-            }
+            RemoveMode = true;
 
             MessageBox.Show(
                 "Please click on the station which you want to remove.",
@@ -304,14 +333,7 @@ namespace DroneRepairStationFinder
             }
             else
             {
-                foreach (UIElement element in TreeGrid.Children)
-                {
-                    if (element is Border nodeBorder && nodeBorder.Tag is BinaryTreeNode<GeoCoordinate>)
-                    {
-                        nodeBorder.Cursor = Cursors.Arrow;
-                        nodeBorder.MouseLeftButtonDown -= Node_MouseLeftButtonDown;
-                    }
-                }
+                RemoveMode = false;
             }
         }
     }
